@@ -18,7 +18,7 @@
    padding-top: 16px;
 }
  
-.login-from-row {
+.login-form-row {
    padding-top: 16px;
    padding-bottom: 16px;
 }
@@ -37,7 +37,7 @@
 }
 
 .fondo {
-   background-image: url("../images/welcome-page-bg.jpg");
+   background-image: url("../images/fondo.jpg");
    background-repeat: no-repeat;
    background-attachment: fixed;
    background-position: center;

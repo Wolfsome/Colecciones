@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title>Crono Escalada Chanata Bike 2024</title>
+    <title>Colección de Monedas</title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="common/public/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="common/public/css/bootstrap.min.css" crossorigin="anonymous">
     <script src="common/public/js/bootstrap.bundle.min.js"></script>
     <script defer src="common/public/js/all.js"></script>
-    <script src="common/public/js/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="common/public/js/jquery-3.6.0.js" crossorigin="anonymous"></script>
 
     <!-- Tablas -->
     <link rel="stylesheet" type="text/css" href="common/public/css/jquery.dataTables.css">
@@ -19,10 +19,10 @@
     <link rel="stylesheet" href="common/public/css/style.css">
 
     <!-- Fontawesome -->
-	  <link rel="stylesheet" href="common/public/css/all.css">
+	  <link rel="stylesheet" href="common/public/css/fontawesome.min.css">
 
 	  <!-- FavIcon -->
-	  <link rel="shortcut icon" href="logo_chanata.ico"> 
+	  <link rel="shortcut icon" href="../common/public/images/icono_monedas.png"> 
   </head>
 
   <body class="fondo">
@@ -30,9 +30,9 @@
     <div class="container">
       <br>
       <div class="col text-center">
-        <div class="col login-form" style="background-color:white;">
+        <div class="col " style="background-color:white;">
           <div class="row">
             <div class="col-lg-12">
-              <p class="login-form-font-header">CronoEscalada<br><span>ChanataBike2024</span><p>
+              <p class="login-form-font-header">Colecciones<br><span>Monedas</span><p>
             </div>
           </div>

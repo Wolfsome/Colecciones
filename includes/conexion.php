@@ -1,6 +1,6 @@
 <?php
 $servername = "localhost"; // Nombre/IP del servidor
-$database = "soporte_chanata"; // Nombre de la BBDD
+$database = "coleccion"; // Nombre de la BBDD
 $username = "root"; // Nombre del usuario
 $password = "Husky@1970"; // Contraseña del usuario
 // Creamos la conexión

@@ -4,12 +4,12 @@
 					<!-- Copyright -->
 					<div class="text-center p-2" style="background-color: #FFA500;">
 						© Copyright 
-						<a class="text-reset fw-bold" href="https://www.chanatabike.com/" target="_blank">Chanata Bike</a> - <?php echo date('Y');?>
+						<a class="text-reset fw-bold" href="https://www.facebook.com/profile.php?id=100091331941079" target="_blank">Wolfsome</a> - <?php echo date('Y');?>
 					</div>
 					<!-- Copyright -->
 				</footer>
 				<!-- Footer -->
-				<p></p>
+
 			</div>
     	</div>
   	</div>
