@@ -11,9 +11,23 @@
 
 <div class="row" style="text-align:justify;">
   <div class="col-lg-12 lg-light rounded" style="text-align:justify;">
-    <div class="col-lg-12 login-from-row mx-2">
-      Vamos al lío!!!!
-    </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #e3f2fd;">
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Buscar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Imprimir</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
 
 
 
