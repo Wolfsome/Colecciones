@@ -40,3 +40,26 @@
               <p class="login-form-font-header">Colecciones<br><span>Monedas</span><p>
             </div>
           </div>
+
+          <div class="row" style="text-align:justify;">
+            <div class="col-lg-12 lg-light rounded" style="text-align:justify;">
+
+              <nav class="navbar navbar-expand-lg navbar-light" style="background-color:orange;">
+                <div class="collapse navbar-collapse" id="navbarText">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toogle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Monedas</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li><a class="dropdown-item" href="nacionales.php">Nacionales</a></li>
+                          <li><a class="dropdown-item" href="extranjeras.php">Extranjeras</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#acercade">Acerca de ...</a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
