@@ -91,7 +91,7 @@
                         $('#tablamonedas tbody').append('<tr>'+
                             '<td><a href="vermoneda.php?id='+item.id+'">' + item.id + '</a></td>' +
                             '<td>' + item.nombre + '</td>' +
-                            '<td>' + item.valor + '</td>' +
+                            '<td>' + item.valor + ' ' + item.unidad + '</td>' +
                             '<td>' + item.anno + '</td>' +
                             '<td><img title="' + item.nombrepais + '" src="common/public/images/' + item.bandera + '"></td>' +
                             '<td><a href="vermoneda.php?id='+item.id+'" class="btn btn-outline btn-success"><i class="fas fa-eye"></a></td>' +
