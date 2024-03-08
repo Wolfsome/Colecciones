@@ -1,14 +1,45 @@
 <?php
 
-  //Mostramos los errores
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
+//Mostramos los errores
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-  $_SESSION['pagina'] = 'Monedas - España';
+$_SESSION['pagina'] = 'Monedas - España';
 
-  include_once 'includes/header.php';
+include_once 'includes/header.php';
+
+//Vamos a obtener todas las monedas de España
+$sql= "SELECT * FROM monedas WHERE pais = 'es';";
+$query = mysqli_query($con,$sql) or die(mysqli_errno($con));
   
+while ($row = mysqli_fetch_array($query)){
+
+    // Modal
+
+    echo'
+    <div class="modal fade" id="monedaModal-'.$row['id'].'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">'.strtoupper($row['nombre']).'</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
+    </div>';
+
+    //Fin del Modal
+    
+}
+
 ?>
 
     <div class="container text-center">
@@ -89,12 +120,12 @@
                 // Itera sobre los datos y agrega filas a la tabla
                 $.each(data, function(index, item){
                         $('#tablamonedas tbody').append('<tr>'+
-                            '<td><a href="vermoneda.php?id='+item.id+'">' + item.id + '</a></td>' +
+                            '<td><a href="#" data-bs-toggle="modal" data-bs-target="#monedaModal-' + item.id + '">' + item.id + '</a></td>' +
                             '<td>' + item.nombre + '</td>' +
                             '<td>' + item.valor + ' ' + item.unidad + '</td>' +
                             '<td>' + item.anno + '</td>' +
-                            '<td><img title="' + item.nombrepais + '" src="common/public/images/' + item.bandera + '"></td>' +
-                            '<td><a href="vermoneda.php?id='+item.id+'" class="btn btn-outline btn-success"><i class="fas fa-eye"></a></td>' +
+                            '<td><img title="' + item.nombrepais + '" src="common/public/images/paises/' + item.bandera + '"></td>' +
+                            '<td><button type="button" class="btn btn-primary btn-outline" data-bs-toggle="modal" data-bs-target="#monedaModal-' + item.id + '"><i class="fas fa-eye"></i></button></td>' +
                             '<td><a href="borrarmoneda.php?id='+item.id+'" class="btn btn-outline btn-danger"><i class="fas fa-trash"></a></td>' +
                         '</tr>');
                 });
