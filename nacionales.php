@@ -18,20 +18,50 @@ while ($row = mysqli_fetch_array($query)){
     // Modal
 
     echo'
-    <div class="modal fade" id="monedaModal-'.$row['id'].'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade modal-lg" id="monedaModal-'.$row['id'].'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">'.strtoupper($row['nombre']).'</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                <div class="modal-header mb-2">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">'.strtoupper($row['nombre']).'</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="card modal-body mx-2 mb-2">
+                    <div class="row">
+                        <div class="col-lg-6 lg-light rounded" style="text-align:justify;">
+                            <b>Nombre:</b> '.$row['nombre'].'
+                            <br>
+                            <b>Valor:</b> '.$row['valor'].' '.$row['unidad'].'
+                            <br>
+                            <b>Año:</b> '.$row['anno'].' 
+                            <br>
+                            <b>Estado:</b> '.$row['estado'].'
+                            <br>
+                            <b>Motivo:</b> '.$row['motivo'].'
+                            <br>
+                            <b>Cantidad:</b> '.$row['cantidad'].'
+                        </div>
+                        <div class="col-lg-6 lg-light rounded" style="text-align:justify;">
+                            <b>Observaciones:</b> '.$row['observaciones'].'
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 lg-light rounded text-center" style="text-align:justify;">';                            
+                        $sqlcoin = "SELECT * FROM fotos WHERE id_moneda = ".$row['id'].";";
+                        $querycoin = mysqli_query($con,$sqlcoin) or die(mysqli_errno($con));
+                        $coin = mysqli_fetch_array($querycoin);
+
+                        if(!isset($coin['foto'])){
+                            echo '<img src="common/public/images/monedas/moneda.png" width="auto" height="100%">';
+                        }else{
+                            echo '<img src="common/public/images/monedas/'.$coin['foto'].'" width="auto" height="100%">';
+                        }
+                    echo '</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <a href="editar.php?id='.$row['id'].'" type="button" class="btn btn-primary">Editar</a>
+                </div>
             </div>
         </div>
     </div>';
@@ -54,7 +84,6 @@ while ($row = mysqli_fetch_array($query)){
                         <th>Año</th>
                         <th>País</th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,107 +99,69 @@ while ($row = mysqli_fetch_array($query)){
 
 <script>
     $(document).ready(function () {
-
-        // Inicializa el DataTable y guárdalo en una variable
-        var tablaMonedas = $('#tablamonedas').DataTable({
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todas"]],
-            "language": {
-                "sLengthMenu":"Mostrar _MENU_ monedas",
-                "sInfo":"Mostrando monedas desde la _START_ al _END_ de un total de _TOTAL_ monedas",
-                "sInfoEmpty":"No hay monedas",
-                "sSearch":"Buscar:",
-                "sInfoFiltered":"(filtrado de un total de _MAX_ monedas)",
-                "sZeroRecords":"No se encontraron monedas",
+        $('#tablamonedas').DataTable({
+            "ajax": {
+                "url": "datos_nacionales.php",
+                "dataSrc": ""
+            },
+            "language":	{
+                "sProcessing":     "Procesando...",
+                "sLengthMenu":     "Mostrar _MENU_ monedas",
+                "sZeroRecords":    "No se encontraron monedas",
+                "sEmptyTable":     "Ninguna moneda disponible en esta tabla",
+                "sInfo":           "Mostrando monedas del _START_ al _END_ de un total de _TOTAL_ monedas",
+                "sInfoEmpty":      "Mostrando monedas del 0 al 0 de un total de 0 monedas",
+                "sInfoFiltered":   "(filtrado de un total de _MAX_ monedas)",
+                "sInfoPostFix":    "",
+                "sSearch":         "Buscar:",
+                "sUrl":            "",
+                "sInfoThousands":  ",",
+                "sLoadingRecords": "Cargando...",
                 "oPaginate": {
-                    "sFirst":    "Primero",
-                    "sLast":     "Último",
-                    "sNext":     "Siguiente",
-                    "sPrevious": "Anterior"
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
                 },
                 "oAria": {
-                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                 }
-            },
-            "columnDefs":[
-                { "orderable": true, "targets": 0 },
-                { "orderable": true, "targets": 1 },
-                { "orderable": true, "targets": 2 },
-                { "orderable": true, "targets": 3 },
-                { "orderable": false, "targets": 4 },
-                { "orderable": false, "targets": 5 }
-            ],
-            "order":[
-                [0,'asc']
+                    },
+            "columns": [
+                {
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return '<a href="#" class="ver-moneda" data-bs-toggle="modal" data-bs-target="#monedaModal-' + row.id + '" title="Ver moneda">' + row.id + '</a>';                    
+                    },
+                 },
+                { "data": "nombre" },
+                { "data": "valor" },
+                { "data": "anno" },
+                {
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return '<img src="common/public/images/paises/' + row.bandera + '" title="' + row.nombrepais + '">';                    
+                    },
+                },
+                { 
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return '<a href="#" class="btn btn-primary btn-outline ver-moneda" data-bs-toggle="modal" data-bs-target="#monedaModal-' + row.id + '" title="Ver moneda"><i class="fas fa-eye"></i></a> <a href="eliminarmoneda.php?id=" class="btn btn-danger btn-outline" title="Eliminar moneda"><i class="fas fa-trash"></i></a>';
+                    }, 
+                    "orderable": false, // Última columna no ordenable
+                    "width": "100px" 
+                }
             ]
         });
 
-        $.ajax({
-            url: 'datos_nacionales.php',
-            method: 'POST',
-            dataType: 'json',
-            success: function(data){
-
-                // Destruye la instancia actual del DataTable
-                tablaMonedas.destroy();
-
-                // Limpia el cuerpo de la tabla
-                $('#tablamonedas tbody').empty();
-            
-                // Itera sobre los datos y agrega filas a la tabla
-                $.each(data, function(index, item){
-                        $('#tablamonedas tbody').append('<tr>'+
-                            '<td><a href="#" data-bs-toggle="modal" data-bs-target="#monedaModal-' + item.id + '">' + item.id + '</a></td>' +
-                            '<td>' + item.nombre + '</td>' +
-                            '<td>' + item.valor + ' ' + item.unidad + '</td>' +
-                            '<td>' + item.anno + '</td>' +
-                            '<td><img title="' + item.nombrepais + '" src="common/public/images/paises/' + item.bandera + '"></td>' +
-                            '<td><button type="button" class="btn btn-primary btn-outline" data-bs-toggle="modal" data-bs-target="#monedaModal-' + item.id + '"><i class="fas fa-eye"></i></button></td>' +
-                            '<td><a href="borrarmoneda.php?id='+item.id+'" class="btn btn-outline btn-danger"><i class="fas fa-trash"></a></td>' +
-                        '</tr>');
-                });
-
-                tablaMonedas = $('#tablamonedas').DataTable({
-                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todas"]],
-                    "language": {
-                        "sLengthMenu":"Mostrar _MENU_ monedas",
-                        "sInfo":"Mostrando monedas desde la _START_ al _END_ de un total de _TOTAL_ monedas",
-                        "sInfoEmpty":"No hay monedas",
-                        "sSearch":"Buscar:",
-                        "sInfoFiltered":"(filtrado de un total de _MAX_ monedas)",
-                        "sZeroRecords":"No se encontraron monedas",
-                        "oPaginate": {
-                            "sFirst":    "Primero",
-                            "sLast":     "Último",
-                            "sNext":     "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        }
-                    },
-                    "columnDefs":[
-                        { "orderable": true, "targets": 0 },
-                        { "orderable": true, "targets": 1 },
-                        { "orderable": true, "targets": 2 },
-                        { "orderable": true, "targets": 3 },
-                        { "orderable": false, "targets": 4 },
-                        { "orderable": false, "targets": 5 }
-                    ],
-                    "order":[
-                        [0,'asc']
-                    ]
-                });
-            
-            },
-            
-            error: function(){
-                // Si hay un error en la solicitud, maneja el error aquí
-                console.error('Error al cargar los datos');
-            }
-            
+        // Manejar el clic en el botón "Ver moneda"
+        $('#tablamonedas').on('click', '.ver-moneda', function () {
+            // Obtener el ID de la moneda desde el atributo data-id del botón
+            var monedaId = $(this).data('id');
+            // Abrir el modal correspondiente
+            $('#monedaModal-' + monedaId).modal('show');
         });
-    });
 
+    });
 </script>

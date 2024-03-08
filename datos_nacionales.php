@@ -5,6 +5,9 @@
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
 
+  // Devuelve los resultados en formato JSON
+  header('Content-Type: application/json');
+
   require_once 'includes/conexion.php';
 
   $sql = "SELECT monedas.*, paises.nombre AS nombrepais, paises.bandera FROM monedas JOIN paises ON monedas.pais = paises.id";
@@ -18,11 +21,11 @@
         $data[] = $row;
     }
 
-    // Devuelve los resultados en formato JSON
-    header('Content-Type: application/json');
+
     echo json_encode($data);
   } else {
-    echo "No se encontraron monedas";
+    // Si no hay resultados, devolver un array vacío
+    echo json_encode(array());
   }
 
   mysqli_close($con);
