@@ -30,7 +30,7 @@ while ($row = mysqli_fetch_array($query)){
                         <div class="col-lg-6 lg-light rounded" style="text-align:justify;">
                             <b>Nombre:</b> '.$row['nombre'].'
                             <br>
-                            <b>Valor:</b> '.$row['valor'].' '.$row['unidad'].'
+                            <b>Valor:</b> '.number_format($row['valor'], 1, ',', '.').' '.$row['unidad'].'
                             <br>
                             <b>Año:</b> '.$row['anno'].' 
                             <br>
@@ -74,6 +74,9 @@ while ($row = mysqli_fetch_array($query)){
 
     <div class="container text-center">
         <div class="container mt-3 mb-3">
+
+            <!-- Div para mostrar resultado de operaciones -->
+            <div id="mensajeResultado" class="alert alert-success" style="display: none;"></div>
 
             <table id="tablamonedas" class="table table-striped" style="width:100%">
                 <thead>
@@ -136,7 +139,15 @@ while ($row = mysqli_fetch_array($query)){
                     },
                  },
                 { "data": "nombre" },
-                { "data": "valor" },
+                { "data": "valor",
+                   "render": function (data, type, row) {
+                        // Formatear el valor con coma y condición para el decimal
+                        var formattedValue = parseFloat(row.valor);
+                        formattedValue = formattedValue % 1 === 0 ? formattedValue.toFixed(0) : formattedValue.toFixed(1);
+                        formattedValue = formattedValue.toString().replace('.', ',');
+                        return formattedValue + ' ' + row.unidad;
+                   }
+                },
                 { "data": "anno" },
                 {
                     "data": null,
@@ -147,7 +158,7 @@ while ($row = mysqli_fetch_array($query)){
                 { 
                     "data": null,
                     "render": function (data, type, row) {
-                        return '<a href="#" class="btn btn-primary btn-outline ver-moneda" data-bs-toggle="modal" data-bs-target="#monedaModal-' + row.id + '" title="Ver moneda"><i class="fas fa-eye"></i></a> <a href="eliminarmoneda.php?id=" class="btn btn-danger btn-outline" title="Eliminar moneda"><i class="fas fa-trash"></i></a>';
+                        return '<a href="#" class="btn btn-primary btn-outline ver-moneda" data-bs-toggle="modal" data-bs-target="#monedaModal-' + row.id + '" title="Ver moneda"><i class="fas fa-eye"></i></a> <a href="#" class="btn btn-danger btn-outline eliminar-moneda" data-id="' + row.id + '" title="Eliminar moneda"><i class="fas fa-trash"></i></a>';
                     }, 
                     "orderable": false, // Última columna no ordenable
                     "width": "100px" 
@@ -162,6 +173,58 @@ while ($row = mysqli_fetch_array($query)){
             // Abrir el modal correspondiente
             $('#monedaModal-' + monedaId).modal('show');
         });
+
+        // Manejar el clic en el botón "Eliminar moneda"
+        $('#tablamonedas').on('click', '.eliminar-moneda', function (e) {
+            e.preventDefault();
+
+            // Obtener el ID de la moneda desde el atributo data-id del botón
+            var monedaId = $(this).data('id');
+
+            // Preguntar al usuario si realmente desea eliminar la moneda
+            var confirmacion = window.confirm('¿Estás seguro de que deseas eliminar esta moneda?');
+
+            if (confirmacion) {
+                // Realizar la operación AJAX
+                $.ajax({
+                    url: 'eliminarmoneda.php',
+                    method: 'POST',
+                    data: { id: monedaId },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            // Mostrar el mensaje de éxito
+                            mostrarMensaje('Moneda eliminada correctamente');
+
+                            // Ocultar el mensaje después de 1 segundo
+                            setTimeout(function () {
+                                ocultarMensaje();
+                            }, 1000);
+
+                            // Recargar la tabla
+                            $('#tablamonedas').DataTable().ajax.reload();
+                        } else {
+                            // Manejar el error, mostrar un mensaje, etc.
+                            console.error(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Manejar errores de la solicitud AJAX
+                        console.error(error);
+                    }
+                });
+            }
+        });
+
+        // Función para mostrar el mensaje en el div
+        function mostrarMensaje(mensaje, clase = 'alert-success') {
+            $('#mensajeResultado').removeClass().addClass('alert ' + clase).text(mensaje).show();
+        }
+
+        // Función para ocultar el mensaje en el div
+        function ocultarMensaje() {
+            $('#mensajeResultado').hide();
+        }
 
     });
 </script>
