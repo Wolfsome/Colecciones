@@ -137,7 +137,7 @@ $row = mysqli_fetch_array($query);
                                     echo '<p align="center"><a href="common/public/images/monedas.png" target="_blank"><img src="common/public/images/monedas.png" style="width:300px;height:auto;"></a></p>';
                                 }
                             ?>
-                            <input type="file" class="form-control-file mb-2" name="cargarfoto" />
+                            <input type="file" class="form-control-file mb-2" name="cargarfoto" id="cargarfoto"/>
                         </div>
                     </div>
                 </div>
@@ -210,6 +210,14 @@ $(document).ready(function() {
                         ocultarMensaje();
                     }, 1000);
 
+                    // Recargar la página después de un breve retraso
+                    setTimeout(function () {
+                        location.reload();
+
+                        // Limpiar el campo de entrada de tipo file después de recargar la página
+                        $('#cargarfoto').val('');
+                    }, 1000);
+
                 } else {
                     // Mostrar el mensaje de error
                     mostrarMensaje(response.mensaje);
@@ -222,6 +230,11 @@ $(document).ready(function() {
             error: function() {
                 // Maneja errores de la solicitud AJAX
                 $('#mensajeResultado').html('<strong>Error al enviar la solicitud.</strong>').removeClass('alert-success').addClass('alert-danger').show();
+
+                // Ocultar el mensaje después de 1 segundo
+                setTimeout(function () {
+                    ocultarMensaje();
+                }, 1000);
             }
         });
     });
