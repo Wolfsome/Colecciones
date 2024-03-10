@@ -15,6 +15,9 @@ $query = mysqli_query($con,$sql) or die(mysqli_errno($con));
   
 while ($row = mysqli_fetch_array($query)){
 
+    $sqlestado = "SELECT * FROM estado WHERE id='".$row['estado']."';";
+    $queryestado = mysqli_query($con,$sqlestado) or die(mysqli_errno($con));
+    $estado = mysqli_fetch_array($queryestado);
     // Modal
 
     echo'
@@ -34,7 +37,7 @@ while ($row = mysqli_fetch_array($query)){
                             <br>
                             <b>Año:</b> '.$row['anno'].' 
                             <br>
-                            <b>Estado:</b> '.$row['estado'].'
+                            <b>Estado:</b> '.$estado['descripcion'].'
                             <br>
                             <b>Motivo:</b> '.$row['motivo'].'
                             <br>
