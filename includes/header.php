@@ -43,6 +43,10 @@
     <link rel="stylesheet" type="text/css" href="common/public/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="common/public/js/jquery.dataTables.js"></script>
 
+    <!-- Select 2 -->
+    <link href="common/public/css/select2.min.css" rel="stylesheet" />
+<script src="common/public/js/select2.min.js"></script>
+
     <!-- Hoja de estilos propia -->
     <link rel="stylesheet" href="common/public/css/style.css">
 
