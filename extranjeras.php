@@ -5,18 +5,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$_SESSION['pagina'] = 'Monedas - España';
+$_SESSION['pagina'] = 'Monedas - Extranjeras';
 
 include_once 'includes/header.php';
 
-//Vamos a obtener todas las monedas de España
-$sql= "SELECT * FROM monedas WHERE pais LIKE 'es%';";
+//Vamos a obtener todas las monedas extranjeras
+$sql= "SELECT * FROM monedas WHERE pais <> 'es';";
 $query = mysqli_query($con,$sql) or die(mysqli_errno($con));
   
 while ($row = mysqli_fetch_array($query)){
 
-    // Obtenemos los datos del estado para mostrar en el modal
-    $sqlestado = "SELECT descripcion FROM estado WHERE id='".$row['estado']."';";
+    $sqlestado = "SELECT * FROM estado WHERE id='".$row['estado']."';";
     $queryestado = mysqli_query($con,$sqlestado) or die(mysqli_errno($con));
     $estado = mysqli_fetch_array($queryestado);
     // Obtenemos los datos de la divisa para mostrar en el modal
@@ -117,7 +116,7 @@ while ($row = mysqli_fetch_array($query)){
     $(document).ready(function () {
         $('#tablamonedas').DataTable({
             "ajax": {
-                "url": "datos_nacionales.php",
+                "url": "datos_extranjeras.php",
                 "dataSrc": ""
             },
             "language":	{

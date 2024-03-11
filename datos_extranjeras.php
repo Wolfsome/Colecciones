@@ -10,7 +10,7 @@
 
   require_once 'includes/conexion.php';
 
-  $sql = "SELECT monedas.*, paises.nombre AS nombrepais, paises.bandera, paises.divisa FROM monedas JOIN paises ON monedas.pais = paises.id WHERE monedas.pais LIKE 'es%';";
+  $sql = "SELECT monedas.*, paises.nombre AS nombrepais, paises.bandera, paises.divisa FROM monedas JOIN paises ON monedas.pais = paises.id WHERE (monedas.pais <> 'es' AND monedas.pais <> 'es2')";
   $consulta = mysqli_query($con,$sql) or die(mysqli_errno($con));
   $total = mysqli_num_rows($consulta);
 

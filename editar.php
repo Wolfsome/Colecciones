@@ -43,6 +43,31 @@ $row = mysqli_fetch_array($query);
                             </div>
                         </div>
                         <div class="form-group row">
+                            <div class="col col-md-12 mt-2 mb-3">
+                                <label for="pais">
+                                    País
+                                </label>
+                                <?php
+                                    //Vamos a obtener la lista de países de la BB.DD.
+                                    $sqlpaises = "SELECT * FROM paises ORDER BY nombre";
+                                    $querypaises = mysqli_query($con,$sqlpaises) or die(mysqli_errno($con));
+
+                                    //Vamos a generar un select para mostrar el pais
+                                    echo '<select name="pais" id="pais" class="form-control select-pais">
+                                            <option value="">SELECCIONE UN PAÍS</option>';
+                                    while ($paises = mysqli_fetch_array($querypaises)){
+                                        $banderaURL = 'common/public/images/paises/'.urlencode($paises['id']).'.png';
+                                        if($paises['id'] == $row['pais']) {
+                                            echo '<option value="'.$paises['id'].'" data-img-src="'.$banderaURL.'" selected>'.$paises['nombre'].'</option>';
+                                        }else{
+                                            echo '<option value="'.$paises['id'].'" data-img-src="'.$banderaURL.'">'.$paises['nombre'].'</option>';
+                                        }
+                                    }
+                                    echo '</select>';
+                                ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <div class="col col-md-4">
                                 <label for="valor">
                                     Valor
@@ -53,7 +78,22 @@ $row = mysqli_fetch_array($query);
                                 <label for="unidad">
                                     Divisa
                                 </label>
-                                <input type="text" class="form-control" name="unidad" value="<?php echo $row['unidad'];?>" />
+                                <?php
+                                    //Vamos a obtener los tipos de monedas de los países
+                                    $sqldivisas = "SELECT * FROM paises";
+                                    $querydivisas = mysqli_query($con,$sqldivisas) or die(mysqli_errno($con));
+
+                                    //Vamos a generar el SELECT para mostrar y/o elegir la divisa
+                                    echo '<select name="unidad" id="unidad" class="form-control">';
+                                    while ($divisa = mysqli_fetch_array($querydivisas)){
+                                        if($divisa['id']==$row['pais']) {
+                                            echo '<option value="'.$divisa['id'].'" selected>'.$divisa['divisa'].'</option>';
+                                        }else{
+                                            echo '<option value="'.$divisa['id'].'">'.$divisa['divisa'].'</option>';
+                                        }
+                                    }
+                                    echo '</select>';
+                                ?>
                             </div>
                             <div class="col col-md-4">
                                 <label for="cantidad">
@@ -71,30 +111,7 @@ $row = mysqli_fetch_array($query);
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col col-md-6">
-                                <label for="pais">
-                                    País
-                                </label>
-                                <?php
-                                    //Vamos a obtener la lista de países de la BB.DD.
-                                    $sqlpaises = "SELECT * FROM paises ORDER BY nombre";
-                                    $querypaises = mysqli_query($con,$sqlpaises) or die(mysqli_errno($con));
-
-                                    //Vamos a generar un select para mostrar el pais
-                                    echo '<select name="pais" id="pais" class="form-control">
-                                            <option value="">SELECCIONE UN PAÍS</option>';
-                                    while ($paises = mysqli_fetch_array($querypaises)){
-                                        $banderaURL = 'common/public/images/paises/'.urlencode($paises['id']).'.png';
-                                        if($paises['id'] == $row['pais']) {
-                                            echo '<option value="'.$paises['id'].'" data-img-src="'.$banderaURL.'" selected>'.$paises['nombre'].'</option>';
-                                        }else{
-                                            echo '<option value="'.$paises['id'].'" data-img-src="'.$banderaURL.'">'.$paises['nombre'].'</option>';
-                                        }
-                                    }
-                                    echo '</select>';
-                                ?>
-                            </div>
-                            <div class="col col-md-6">
+                            <div class="col col-md-12">
                                 <label for="estado">
                                     Estado
                                 </label>
@@ -171,11 +188,6 @@ $(document).ready(function() {
         escapeMarkup: function(m) { return m; },
     });
 
-    // Select2 para el campo de estado
-    $('#estado').select2({
-        width: 'auto'
-    });
-
     function formatCountry(country) {
         if (!country.id) { return country.text; }
         var $country = $(
@@ -248,6 +260,28 @@ $(document).ready(function() {
     function ocultarMensaje() {
         $('#mensajeResultado').hide();
     }
+
+    $('.select-pais').change(function() {
+        var selectedPais = $(this).val();
+
+        // Realiza una solicitud AJAX para obtener las divisas del país seleccionado
+        $.ajax({
+            type: 'POST',
+            url: 'get_divisas_por_pais.php', // Reemplaza con el nombre correcto de tu archivo PHP
+            data: { pais: selectedPais },
+            dataType: 'json',
+            success: function(response) {
+                // Limpiar y actualizar el select de divisas
+                $('#unidad').empty();
+                $.each(response.divisas, function(index, divisa) {
+                    $('#unidad').append('<option value="' + divisa.id + '">' + divisa.divisa + '</option>');
+                });
+            },
+            error: function() {
+                console.error('Error al obtener divisas por país.');
+            }
+        });
+    });
 
 });
 

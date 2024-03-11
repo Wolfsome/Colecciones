@@ -33,19 +33,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title>Colección de Monedas y Libros</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="common/public/css/bootstrap.min.css" crossorigin="anonymous">
-    <script src="common/public/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
     <script defer src="common/public/js/all.js"></script>
     <script src="common/public/js/jquery-3.6.0.js" crossorigin="anonymous"></script>
 
-    <!-- Tablas -->
-    <link rel="stylesheet" type="text/css" href="common/public/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="common/public/js/jquery.dataTables.js"></script>
+    <!-- Bottstrap jQuery -->
+    <script src="common/public/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Select 2 -->
+    <!-- Datatable jQuery -->
+    <script type="text/javascript" charset="utf8" src="common/public/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="common/public/js/buttons.bootstrap.min.js"></script>
+
+    <!-- Select 2 jQuery -->
+    <script src="common/public/js/select2.min.js"></script>
+
+    <!-- Select 2 CSS -->
     <link href="common/public/css/select2.min.css" rel="stylesheet" />
-<script src="common/public/js/select2.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="common/public/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="common/public/css/buttons.bootstrap.min.css">
+
+    <!-- Tablas CSS -->
+    <link rel="stylesheet" type="text/css" href="common/public/css/jquery.dataTables.css">
 
     <!-- Hoja de estilos propia -->
     <link rel="stylesheet" href="common/public/css/style.css">
@@ -87,6 +97,13 @@
                     </li>
                     <li class="nav-item active">
                       <a class="nav-link" href="#">Libros</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toogle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administración</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li><a class="dropdown-item" href="estados.php">Estados de conservación</a></li>
+                          <li><a class="dropdown-item" href="paises.php">Países / Divisas</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#acercade">Acerca de ...</a>
