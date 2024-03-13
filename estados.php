@@ -15,7 +15,7 @@ $query = mysqli_query($con,$sql) or die(mysqli_errno($con));
   
 while ($row = mysqli_fetch_array($query)){
 
-    // Modal
+    // Modal Ver Estado
     echo'
     <div class="modal fade modal-lg" id="estadoModal-'.$row['id'].'" tabindex="-1" aria-labelledby="estadoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -82,6 +82,8 @@ while ($row = mysqli_fetch_array($query)){
                 "url": "datos_estados.php",
                 "dataSrc": ""
             },
+            "lengthMenu": [[ 10, 25, 50, -1 ], [ 10, 25, 50, "Todos" ]], // Define las opciones de cantidad de registros por página
+            "pageLength": 10, // Define la cantidad de registros por página por defecto
             "language":	{
                 "sProcessing":     "Procesando...",
                 "sLengthMenu":     "Mostrar _MENU_ estados",

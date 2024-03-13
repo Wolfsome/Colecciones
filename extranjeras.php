@@ -119,6 +119,8 @@ while ($row = mysqli_fetch_array($query)){
                 "url": "datos_extranjeras.php",
                 "dataSrc": ""
             },
+            "lengthMenu": [[ 10, 25, 50, -1 ], [ 10, 25, 50, "Todos" ]], // Define las opciones de cantidad de registros por página
+            "pageLength": 10, // Define la cantidad de registros por página por defecto
             "language":	{
                 "sProcessing":     "Procesando...",
                 "sLengthMenu":     "Mostrar _MENU_ monedas",
