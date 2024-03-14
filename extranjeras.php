@@ -67,7 +67,7 @@ while ($row = mysqli_fetch_array($query)){
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                    <a href="editar.php?id='.$row['id'].'" type="button" class="btn btn-primary">Editar</a>
+                    <a href="editar.php?id='.$row['id'].'&destino=Editar Monedas - Extranjeras" type="button" class="btn btn-primary">Editar</a>
                 </div>
             </div>
         </div>
@@ -84,11 +84,6 @@ while ($row = mysqli_fetch_array($query)){
 
             <!-- Div para mostrar resultado de operaciones -->
             <div id="mensajeResultado" class="alert alert-success" style="display: none;"></div>
-
-            <!-- Agrega el botón para insertar una nueva moneda -->
-            <div class="d-flex justify-content-end mb-3">
-                <a href="nueva-moneda.php?pais='es'" class="btn btn-dark" title="Añadir nueva moneda"><i class="fas fa-plus"></i> Moneda</a>
-            </div>
 
             <table id="tablamonedas" class="table table-striped" style="width:100%">
                 <thead>
@@ -179,6 +174,9 @@ while ($row = mysqli_fetch_array($query)){
                 }
             ]
         });
+
+        // Agregamos el botón dentro del contenedor de búsqueda
+        $('.dataTables_filter').append('<a href="nueva.php" class="btn btn-dark ms-2" title="Añadir nueva moneda"><i class="fas fa-plus"></i> Moneda</a>');
 
         // Manejar el clic en el botón "Ver moneda"
         $('#tablamonedas').on('click', '.ver-moneda', function () {

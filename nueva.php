@@ -5,27 +5,26 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$_SESSION['pagina'] = $_GET['destino'];
+//obtenemos de que página venimos
+if(isset($_GET['pais']))
+    $pais = $_GET['pais'];
+else
+    $pais = "otros";
+
+if($pais == "otros")
+    $_SESSION['pagina'] = "Nueva Moneda - Extranjeras";
+else
+    $_SESSION['pagina'] = "Nueva Moneda - Nacionales";
+
 
 include_once 'includes/header.php';
-
-$idmoneda = $_GET['id'];
-
-$sql = "SELECT * FROM monedas WHERE id = ".$idmoneda;
-$query = mysqli_query($con,$sql) or die(mysqli_errno($con));
-$total = mysqli_num_rows($query);
-$row = mysqli_fetch_array($query);
 
 ?>
 
 <div class="container">
     <div class="container mt-3 mb-3">
-
-        <!-- Div para mostrar resultado de operaciones -->
-        <div id="mensajeResultado" class="alert alert-success" style="display: none;"></div>
-
         <div class="container-fluid">
-            <form role="form" class="form-inline" id="editarMonedaForm" enctype="multipart/form-data" method="post" action="update_moneda.php">
+            <form role="form" class="form-inline" id="nuevaMonedaForm" enctype="multipart/form-data" method="post" action="insert_moneda.php">
                 <div class="row mb-3">
                     <div class="col col-md-6">
                         <div class="form-group row">
@@ -33,13 +32,13 @@ $row = mysqli_fetch_array($query);
                                 <label for="nombre">
                                     Moneda
                                 </label>
-                                <input type="text" class="form-control" name="nombre" value="<?php echo $row['nombre'];?>" />
+                                <input type="text" class="form-control" name="nombre" />
                             </div>
                             <div class="col col-md-3">
                                 <label for="anno">
                                     Año
                                 </label>
-                                <input type="text" class="form-control text-center" name="anno" value="<?php echo $row['anno'];?>" />
+                                <input type="text" class="form-control text-center" name="anno"/>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -50,10 +49,10 @@ $row = mysqli_fetch_array($query);
                                 <?php
                                     //Vamos a obtener la lista de países de la BB.DD.
                                     $sqlpaises = "SELECT * FROM paises";
-                                    if($_SESSION['pagina'] == 'Editar Monedas - España')
-                                        $sqlpaises .= " WHERE id LIKE 'es%' ORDER BY nombre";
+                                    if($pais=='otros')
+                                        $sqlpaises .= " WHERE id <> 'es' AND id <> 'es2'  ORDER BY nombre;";
                                     else
-                                        $sqlpaises .= " WHERE id <> 'es' AND id <> 'es2' ORDER BY nombre";
+                                        $sqlpaises .= " WHERE id LIKE 'es%'  ORDER BY nombre;";
                                     $querypaises = mysqli_query($con,$sqlpaises) or die(mysqli_errno($con));
 
                                     //Vamos a generar un select para mostrar el pais
@@ -76,7 +75,7 @@ $row = mysqli_fetch_array($query);
                                 <label for="valor">
                                     Valor
                                 </label>
-                                <input type="text" class="form-control" name="valor" value="<?php echo $row['valor'];?>" />
+                                <input type="text" class="form-control" name="valor"/>
                             </div>
                             <div class="col col-md-4">
                                 <label for="unidad">
@@ -103,7 +102,7 @@ $row = mysqli_fetch_array($query);
                                 <label for="cantidad">
                                     Cantidad
                                 </label>
-                                <input type="text" class="form-control" name="cantidad" value="<?php echo $row['cantidad'];?>" />
+                                <input type="text" class="form-control" name="cantidad"/>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -111,7 +110,7 @@ $row = mysqli_fetch_array($query);
                                 <label for="motivo">
                                     Motivo
                                 </label>
-                                <input type="text" class="form-control" name="motivo" value="<?php echo $row['motivo'];?>" />
+                                <input type="text" class="form-control" name="motivo"/>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -128,11 +127,7 @@ $row = mysqli_fetch_array($query);
                                     echo '<select name="estado" id="estado" class="form-control">
                                             <option value="">SELECCIONE UN ESTADO DE CONSERVACION</option>';
                                     while ($estado = mysqli_fetch_array($queryestados)){
-                                        if($estado['id'] == $row['estado']) {
-                                            echo '<option value="'.$estado['id'].'" selected>'.$estado['descripcion'].'</option>';
-                                        }else{
-                                            echo '<option value="'.$estado['id'].'">'.$estado['descripcion'].'</option>';
-                                        }
+                                        echo '<option value="'.$estado['id'].'" >'.$estado['descripcion'].'</option>';
                                     }
                                     echo '</select>';
                                 ?>
@@ -145,19 +140,7 @@ $row = mysqli_fetch_array($query);
                             <label for="exampleInputFile">
                                 Fotografía
                             </label>
-                            <?php
-                                $sqlfoto = "SELECT * FROM fotos WHERE id_moneda = ".$row['id'].";";
-                                $queryfoto = mysqli_query($con,$sqlfoto) or die(mysqli_errno($con));
-                                $foto = mysqli_fetch_array($queryfoto);
-                                $totalfoto = mysqli_num_rows($queryfoto);
-                                if($totalfoto > 0){
-                                    //Hay foto de la moneda
-                                    echo '<p align="center"><a href="common/public/images/monedas/'.$foto['foto'].'" target="_blank"><img src="common/public/images/monedas/'.$foto['foto'].'" style="width:300px;height:auto;"></a></p>';
-                                }else{
-                                    //No hay foto de la moneda
-                                    echo '<p align="center"><a href="common/public/images/monedas.png" target="_blank"><img src="common/public/images/monedas.png" style="width:300px;height:auto;"></a></p>';
-                                }
-                            ?>
+                            <p align="center"><a href="common/public/images/monedas.png" target="_blank"><img src="common/public/images/monedas.png" style="width:300px;height:auto;"></a></p>
                             <input type="file" class="form-control-file mb-2" name="cargarfoto" id="cargarfoto"/>
                         </div>
                     </div>
@@ -167,12 +150,12 @@ $row = mysqli_fetch_array($query);
                         <label for="observaciones">
                             Observaciones
                         </label>
-                        <textarea class="form-control mb-2" cols="150" rows="5" style="resize:none;" name="observaciones"><?php echo $row['observaciones'];?></textarea>
+                        <textarea class="form-control mb-2" cols="150" rows="5" style="resize:none;" name="observaciones"></textarea>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success" id="bt-Modificar">Modificar</button>
+                <button type="submit" class="btn btn-success" id="bt-Modificar">Grabar</button>
                 <?php
-                    if($_SESSION['pagina'] == "Editar Monedas - España")
+                    if($_SESSION['pagina'] == "Nueva Moneda - Nacionales")
                         $destino = "nacionales.php";
                     else
                         $destino = "extranjeras.php";
