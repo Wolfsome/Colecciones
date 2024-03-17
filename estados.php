@@ -33,11 +33,42 @@ while ($row = mysqli_fetch_array($query)){
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                    <a href="editarestado.php?id='.$row['id'].'" type="button" class="btn btn-primary">Editar</a>
+                    <a href="#" class="btn btn-primary btn-outline editar-estado" data-bs-toggle="modal" data-bs-target="#editarestadoModal-'.$row['id'].'" title="Editar estado">Editar</a>
                 </div>
             </div>
         </div>
     </div>';
+
+    //Fin del Modal
+
+    // Modal Editar Estado
+    echo'
+        <form id="editarestadoform-'.$row['id'].'">
+            <div class="modal fade modal-lg" id="editarestadoModal-'.$row['id'].'" tabindex="-1" aria-labelledby="estadoModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header mb-2">
+                            <h1 class="modal-title fs-5" id="editarestadoModalLabel">ESTADOS DE CONSERVACIÓN</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="card modal-body mx-2 mb-2">
+                            <div class="row">
+                                <div class="col-lg-12 lg-light rounded" style="text-align:justify;">
+                                    <label for="editarestadoinput">Estado:</label>
+                                    <input type="text" class="from-control" name="estado" id="estado" value="'.$row['descripcion'].'">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="id" name="id" value="\''.$row['id'].'\'">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                            <button class="btn btn-primary bt-guardar" data-id='.$row['id'].'>Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    ';
 
     //Fin del Modal
     
@@ -112,7 +143,7 @@ while ($row = mysqli_fetch_array($query)){
                 {
                     "data": null,
                     "render": function (data, type, row) {
-                        return '<a href="#" class="ver-estado" data-bs-toggle="modal" data-bs-target="#estadoModal-' + row.id + '" title="Ver moneda">' + row.id + '</a>';                    
+                        return '<a href="#" class="ver-estado" data-bs-toggle="modal" data-bs-target="#estadoModal-' + row.id + '" title="Ver estado">' + row.id + '</a>';                    
                     },
                  },
                 { "data": "descripcion" },
@@ -148,14 +179,14 @@ while ($row = mysqli_fetch_array($query)){
             if (confirmacion) {
                 // Realizar la operación AJAX
                 $.ajax({
-                    url: 'eliminarestado.php',
+                    url: 'delete-estado.php',
                     method: 'POST',
                     data: { id: estadoId },
                     dataType: 'json',
                     success: function (response) {
                         if (response.success) {
                             // Mostrar el mensaje de éxito
-                            mostrarMensaje('Estado eliminado correctamente');
+                            mostrarMensaje(response.mensaje);
 
                             // Ocultar el mensaje después de 1 segundo
                             setTimeout(function () {
@@ -177,6 +208,55 @@ while ($row = mysqli_fetch_array($query)){
             }
         });
 
+        // Manejar el clic en el botón "Ver estado"
+        $('#tablaestados').on('click', '.ver-estado', function () {
+            // Obtener el ID de la moneda desde el atributo data-id del botón
+            var estadoId = $(this).data('id');
+            // Abrir el modal correspondiente
+            $('#estadoModal-' + estadoId).modal('show');
+        });
+
+        // Manejar el clic en el botón "Guardar" dentro del modal de edición
+        $(document).on('click', '.bt-guardar', function (e) {
+            e.preventDefault();
+
+            // Obtener el ID del estado desde el atributo data-id del botón
+            var estadoId = $(this).data('id');
+
+            // Realizar la operación AJAX
+            $.ajax({
+                url: 'update-estado.php',
+                method: 'POST',
+                data: $('#editarestadoform-'+estadoId).serialize(), // Modificar la selección del formulario
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+
+                        // Cerrar el modal
+                        $('#editarestadoModal-' + estadoId).modal('hide');
+
+                        // Mostrar el mensaje de éxito
+                        mostrarMensaje(response.mensaje);
+
+                        // Ocultar el mensaje después de 1 segundo
+                        setTimeout(function () {
+                            ocultarMensaje();
+                        }, 1000);
+
+                        // Recargar la tabla
+                        $('#tablaestados').DataTable().ajax.reload();
+                    } else {
+                        // Manejar el error, mostrar un mensaje, etc.
+                        console.error(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores de la solicitud AJAX
+                    console.error(error);
+                }
+            });
+        });
+
         // Función para mostrar el mensaje en el div
         function mostrarMensaje(mensaje, clase = 'alert-success') {
             $('#mensajeResultado').removeClass().addClass('alert ' + clase).text(mensaje).show();
@@ -186,6 +266,7 @@ while ($row = mysqli_fetch_array($query)){
         function ocultarMensaje() {
             $('#mensajeResultado').hide();
         }
+
 
     });
 </script>

@@ -42,7 +42,6 @@
 
     <!-- Datatable jQuery -->
     <script type="text/javascript" charset="utf8" src="common/public/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="common/public/js/buttons.bootstrap.min.js"></script>
 
     <!-- Select 2 jQuery -->
     <script src="common/public/js/select2.min.js"></script>
