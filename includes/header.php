@@ -95,7 +95,11 @@
                         </ul>
                     </li>
                     <li class="nav-item active">
-                      <a class="nav-link" href="#">Libros</a>
+                      <a class="nav-link dropdown-toogle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Libros</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li><a class="dropdown-item" href="inacionales.php">Nacionales</a></li>
+                          <li><a class="dropdown-item" href="iextranjeras.php">Extranjeras</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toogle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administración</a>

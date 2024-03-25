@@ -9,10 +9,44 @@ $_SESSION['pagina'] = 'Monedas - Paises y Divisas';
 
 include_once 'includes/header.php';
 
-//Vamos a obtener todas las monedas de España
-$sql= "SELECT * FROM paises;";
-$query = mysqli_query($con,$sql) or die(mysqli_errno($con));
+    // Modal Ver País
+    echo'
+    <div class="modal fade modal-md" id="paisModal" tabindex="-1" aria-labelledby="paisModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content ">
+                <div class="modal-header mb-2">
+                    <h1 class="modal-title fs-5" id="paisModalLabel">PAÍSES Y DIVISAS</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col col-8 mb-2">
+                            <label for="nombre">País: </label>
+                            <span id="nombre"></span>
+                        </div>
+                        <div class="col col-4 mb-2">
+                            <label for="bandera">Bandera: </label>
+                            <span id="bandera"></span>
+                        </div>
+                        <div class="col col-8">
+                            <label for="moneda">Moneda: </label>
+                            <span id="moneda"></span>
+                        </div>
+                        <div class="col col-4">
+                            <label for="iso">Código ISO: </label>
+                            <span id="iso"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <!-- <a href="#" class="btn btn-primary btn-outline editar-estado" data-bs-toggle="modal" data-bs-target="#editarpaisModal" title="Editar estado">Editar</a> -->
+                </div>
+            </div>
+        </div>
+    </div>';
 
+    //Fin del Modal
 
 ?>
 
@@ -80,7 +114,7 @@ $query = mysqli_query($con,$sql) or die(mysqli_errno($con));
                 {
                     "data": null,
                     "render": function (data, type, row) {
-                        return '<a href="#" class="ver-pais" data-bs-toggle="modal" data-bs-target="#paisModal-' + row.id + '" title="Ver país">' + row.id + '</a>';                    
+                        return '<a href="#" class="ver-pais" data-bs-toggle="modal" data-bs-target="#paisModal" data-id="' + row.id + '" title="Ver país">' + row.id + '</a>';                    
                     },
                 },
                 { "data": "nombre" },
@@ -94,12 +128,37 @@ $query = mysqli_query($con,$sql) or die(mysqli_errno($con));
                 { 
                     "data": null,
                     "render": function (data, type, row) {
-                        return '<a href="#" class="btn btn-primary btn-outline ver-pais" data-bs-toggle="modal" data-bs-target="#paisModal-' + row.id + '" title="Ver estado"><i class="fas fa-eye"></i></a> <a href="#" class="btn btn-danger btn-outline eliminar-estado" data-id="' + row.id + '" title="Eliminar pais"><i class="fas fa-trash"></i></a>';
+                        return '<a href="#" class="btn btn-primary ver-pais" data-bs-toggle="modal" data-bs-target="#paisModal" data-id="' + row.id + '" title="Ver país"><i class="fas fa-eye"></i></a> <a href="#" class="btn btn-danger eliminar-pais" data-id="' + row.id + '" title="Eliminar pais"><i class="fas fa-trash"></i></a>';
                     }, 
                     "orderable": false, // Última columna no ordenable
                     "width": "100px" 
                 }
             ],
+        });
+
+        $('#tablapaises').on('click','.ver-pais',function () {
+
+            // Obtener el ID de la moneda desde el atributo data-id del botón
+            var paisId = $(this).data('id');
+
+            // Realizar la operación AJAX
+            $.ajax({
+                url: 'get_pais.php',
+                method: 'POST',
+                data: { id: paisId },
+                dataType: 'json',
+                success: function (response) {
+                    $('#nombre').text(response.data[0].nombre);
+                    $('#bandera').html('<img src="common/public/images/paises/'+response.data[0].bandera+'" title="'+response.data[0].nombre+'">');
+                    $('#moneda').text(response.data[0].divisa);
+                    $('#iso').text(response.data[0].codigo_iso);
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores de la solicitud AJAX
+                    console.error(error);
+                }
+            });
+
         });
 
     });
