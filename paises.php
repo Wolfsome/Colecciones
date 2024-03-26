@@ -86,6 +86,7 @@ include_once 'includes/header.php';
             },
             "lengthMenu": [[ 10, 25, 50, -1 ], [ 10, 25, 50, "Todos" ]], // Define las opciones de cantidad de registros por página
             "pageLength": 10, // Define la cantidad de registros por página por defecto
+            "aaSorting": [[1, "asc"]],
             "language":	{
                 "sProcessing":     "Procesando...",
                 "sLengthMenu":     "Mostrar _MENU_ países",
@@ -133,7 +134,7 @@ include_once 'includes/header.php';
                     "orderable": false, // Última columna no ordenable
                     "width": "100px" 
                 }
-            ],
+            ]
         });
 
         $('#tablapaises').on('click','.ver-pais',function () {

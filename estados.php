@@ -55,7 +55,7 @@ while ($row = mysqli_fetch_array($query)){
                             <div class="row">
                                 <div class="col-lg-12 lg-light rounded" style="text-align:justify;">
                                     <label for="editarestadoinput">Estado:</label>
-                                    <input type="text" class="from-control" name="estado" id="estado" value="'.$row['descripcion'].'">
+                                    <input type="text" class="form-control" name="estado" id="estado" value="'.$row['descripcion'].'">
                                 </div>
                             </div>
                         </div>
