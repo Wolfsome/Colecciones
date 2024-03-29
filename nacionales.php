@@ -61,7 +61,7 @@ while ($row = mysqli_fetch_array($query)){
                         if(!isset($coin['foto'])){
                             echo '<img src="common/public/images/monedas/moneda.png" width="auto" height="100%">';
                         }else{
-                            echo '<img src="common/public/images/monedas/'.$coin['foto'].'" width="auto" height="100%">';
+                            echo '<img src="common/public/images/monedas/'.$coin['foto'].'" width="500px" height="100%">';
                         }
                     echo '</div>
                     </div>

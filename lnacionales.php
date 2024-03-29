@@ -12,10 +12,11 @@ require('common/libs/fpdf/fpdf.php');
 require_once('includes/conexion.php');
 
 //Consultas para obtener los datos de las monedas nacionales
-$sql = "SELECT monedas.*, paises.nombre AS nombrepais, paises.bandera, paises.divisa, e.descripcion AS estado_moneda 
+$sql = "SELECT monedas.*, paises.nombre AS nombrepais, paises.bandera, paises.divisa, e.descripcion AS estado_moneda, f.foto 
     FROM monedas 
     JOIN paises ON monedas.pais = paises.id 
-    JOIN estado e ON monedas.estado = e.id 
+    JOIN estado e ON monedas.estado = e.id
+    LEFT JOIN fotos f ON monedas.id= f.id_moneda
     WHERE monedas.pais LIKE 'es%';";
 $consulta = mysqli_query($con,$sql) or die(mysqli_errno($con));
 $total = mysqli_num_rows($consulta);
@@ -143,6 +144,21 @@ while ($detalle = mysqli_fetch_array($consulta_detalle)){
     $pdf->SetFont('Arial','B',12);
     $pdf->Cell(20,0,'Fotos:',0,0,'J');
     $pdf->Cell(170,60,'',1);
+
+    if($contador==1){
+        $x=35;
+        $y=96;
+    }else{
+        $x=35;
+        $y=212;
+    }
+
+    if(isset($detalle['foto']))
+        $pdf->Image('common/public/images/monedas/'.$detalle['foto'],$x,$y,80);
+    else
+        $pdf->Image('common/public/images/monedas/moneda.png',$x,$y,55);
+
+
     $pdf->Ln(80);
     $pdf->Line(10,170,200,170);
     
@@ -153,4 +169,4 @@ while ($detalle = mysqli_fetch_array($consulta_detalle)){
         $contador++;
     }
 }
-$pdf->Output();
+$pdf->Output('I','Listado de Monedas Nacionales');

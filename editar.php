@@ -177,7 +177,7 @@ $row = mysqli_fetch_array($query);
                     else
                         $destino = "extranjeras.php";
                 ?>
-                <a href="<?php echo $destino;?>" type="button" class="btn btn-danger">Cancelar</a>
+                <a href="<?php echo $destino;?>" type="button" class="btn btn-danger">Volver</a>
                 <input type="hidden" name="idmoneda" value="<?php echo $row['id'];?>">
             </form>
         </div>
@@ -216,7 +216,7 @@ $(document).ready(function() {
         // Realiza la solicitud AJAX
         $.ajax({
             type: 'POST',
-            url: 'update_moneda.php', // Nombre del nuevo archivo PHP
+            url: 'update-moneda.php', // Nombre del nuevo archivo PHP
             data: formData,
             contentType: false,
             processData: false,

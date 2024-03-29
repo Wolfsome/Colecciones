@@ -24,7 +24,7 @@ include_once 'includes/header.php';
 <div class="container">
     <div class="container mt-3 mb-3">
         <div class="container-fluid">
-            <form role="form" class="form-inline" id="nuevaMonedaForm" enctype="multipart/form-data" method="post" action="insert_moneda.php">
+            <form role="form" class="form-inline" id="nuevaMonedaForm" enctype="multipart/form-data" method="post">
                 <div class="row mb-3">
                     <div class="col col-md-6">
                         <div class="form-group row">
@@ -124,7 +124,7 @@ include_once 'includes/header.php';
                                     $queryestados = mysqli_query($con,$sqlestados) or die(mysqli_errno($con));
 
                                     //Vamos a generar un select para mostrar el pais
-                                    echo '<select name="estado" id="estado" class="form-control">
+                                    echo '<select name="estado" id="estado" class="form-select">
                                             <option value="">SELECCIONE UN ESTADO DE CONSERVACION</option>';
                                     while ($estado = mysqli_fetch_array($queryestados)){
                                         echo '<option value="'.$estado['id'].'" >'.$estado['descripcion'].'</option>';
@@ -140,7 +140,7 @@ include_once 'includes/header.php';
                             <label for="exampleInputFile">
                                 Fotografía
                             </label>
-                            <p align="center"><a href="common/public/images/monedas.png" target="_blank"><img src="common/public/images/monedas.png" style="width:300px;height:auto;"></a></p>
+                            <p align="center"><img src="common/public/images/monedas.png" style="width:300px;height:auto;"></p>
                             <input type="file" class="form-control-file mb-2" name="cargarfoto" id="cargarfoto"/>
                         </div>
                     </div>
@@ -160,8 +160,7 @@ include_once 'includes/header.php';
                     else
                         $destino = "extranjeras.php";
                 ?>
-                <a href="<?php echo $destino;?>" type="button" class="btn btn-danger">Cancelar</a>
-                <input type="hidden" name="idmoneda" value="<?php echo $row['id'];?>">
+                <a href="<?php echo $destino;?>" type="button" class="btn btn-danger">Volver</a>
             </form>
         </div>
 
@@ -190,7 +189,7 @@ $(document).ready(function() {
     }
 
     // Agrega un evento de escucha para el formulario
-    $('#editarMonedaForm').submit(function(e) {
+    $('#nuevaMonedaForm').submit(function(e) {
         e.preventDefault(); // Evita que el formulario se envíe de forma convencional
 
         // Serializa los datos del formulario
@@ -199,7 +198,7 @@ $(document).ready(function() {
         // Realiza la solicitud AJAX
         $.ajax({
             type: 'POST',
-            url: 'update_moneda.php', // Nombre del nuevo archivo PHP
+            url: 'save-moneda.php', // Nombre del nuevo archivo PHP
             data: formData,
             contentType: false,
             processData: false,
@@ -217,7 +216,7 @@ $(document).ready(function() {
 
                     // Recargar la página después de un breve retraso
                     setTimeout(function () {
-                        location.reload();
+                        window.location.href='<?php echo $destino;?>';
 
                         // Limpiar el campo de entrada de tipo file después de recargar la página
                         $('#cargarfoto').val('');

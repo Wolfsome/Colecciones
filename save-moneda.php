@@ -7,7 +7,6 @@ include_once 'includes/conexion.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Obtén los datos del formulario
-    $id = $_POST['idmoneda'];
     $nombre = $_POST['nombre'];
     $anno = $_POST['anno'];
     $valor = $_POST['valor'];
@@ -18,23 +17,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $estado = $_POST['estado'];
     $observaciones = $_POST['observaciones'];
 
+
+
+    // Puedes realizar validaciones adicionales aquí si es necesario
+
+    // Construye y ejecuta la consulta SQL de actualización
+    $sql = "INSERT INTO monedas (nombre, anno, valor, unidad, cantidad, motivo, pais, estado, observaciones) VALUES ('$nombre','$anno','$valor','$unidad','$cantidad','$motivo','$pais','$estado','$observaciones');";
+    $resultado = mysqli_query($con,$sql) or die(mysqli_errno($con));
+
+    $id = mysqli_insert_id($con);
+
     // Manejar la carga de la fotografía
     $fotoNombre = '';
     if (!empty($_FILES['cargarfoto']['name'])) {
         $fotoNombre = guardarFoto($id);
     }
-
-    // Puedes realizar validaciones adicionales aquí si es necesario
-
-    // Construye y ejecuta la consulta SQL de actualización
-    $sql = "UPDATE monedas SET nombre='$nombre', anno='$anno', valor='$valor', unidad='$unidad', cantidad='$cantidad', motivo='$motivo', pais='$pais', estado='$estado', observaciones='$observaciones' WHERE id=$id";
-    $resultado = mysqli_query($con,$sql) or die(mysqli_errno($con));
-
+    
     // Actualiza la tabla de fotos si se cargó una nueva foto
-    if (!empty($fotoNombre)) {
-        $sqlFoto = "INSERT INTO fotos (id_moneda, foto) VALUES ('$id', '$fotoNombre')";
+    if (!empty($fotoNombre)) 
+        $sqlFoto = "INSERT INTO fotos (foto,id_moneda) VALUES ('$fotoNombre','$id');";
+    else
+        $sqlFoto = "INSERT INTO fotos (foto, id_moneda) VALUES ('moneda.png','$id');";
         $resultadoFoto = mysqli_query($con, $sqlFoto) or die(mysqli_errno($con));
-    }
+    
+
 
     // Preparamos el array
     $response = array();
@@ -42,11 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($resultado) {
         // Éxito
         $response['estado'] = 'success';
-        $response['mensaje'] = 'Moneda modificada correctamente';
+        $response['mensaje'] = 'Moneda grabada correctamente';
     } else {
         // Error
         $response['estado'] = 'error';
-        $response['mensaje'] = 'Error al modificar la moneda';
+        $response['mensaje'] = 'Error al grabar la moneda';
     }
 
     // Devolver la respuesta JSON al cliente
