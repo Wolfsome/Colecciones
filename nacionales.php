@@ -151,11 +151,7 @@ while ($row = mysqli_fetch_array($query)){
                 { "data": "nombre" },
                 { "data": "valor",
                    "render": function (data, type, row) {
-                        // Formatear el valor con coma y condición para el decimal
-                        var formattedValue = parseFloat(row.valor);
-                        formattedValue = formattedValue % 1 === 0 ? formattedValue.toFixed(0) : formattedValue.toFixed(1);
-                        formattedValue = formattedValue.toString().replace('.', ',');
-                        return formattedValue + ' ' + row.divisa;
+                        return row.valor + ' ' + row.divisa;
                    }
                 },
                 { "data": "anno" },
