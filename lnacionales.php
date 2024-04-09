@@ -3,10 +3,13 @@
 require('common/libs/fpdf/fpdf.php');
 
 
-  //Mostramos los errores
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
+//Mostramos los errores
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
+
+// Establece el límite de memoria a 256 MB
+ini_set('memory_limit', '256M');
 
 //Llamamos al archivo para conectarnos a la base de datos y obtener los datos de la inscripción
 require_once('includes/conexion.php');
